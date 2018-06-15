@@ -1,9 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { HttpClient } from "@angular/common/http";
+import { Observable } from "rxjs/Observable";
+import { NotesService } from "./app.service";
 
 export class Note {
   id?: number;
   name?: string;
   content?: string;
+  date?: Date;
 }
 
 @Component({
@@ -11,27 +15,31 @@ export class Note {
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
-  
-  public notes: Note[] = [
-    { id: 1, name: 'Onboard', content: 'content related to onboard' },
-    { id: 2, name: 'Talent', content: 'content related to Talent' },
-    { id: 3, name: 'Service', content: 'content related to Onboard Service' },
-    { id: 4, name: 'XRM', content: 'content related to XRM' },
-    { id: 5, name: 'Int Test', content: 'content related to Int Test' },
-    { id: 6, name: 'Personal', content: 'content related to Personal' },
-    { id: 7, name: 'Reminders', content: 'content related to Reminders' },
-    
-  ];
+export class AppComponent implements OnInit {
 
-  public selectedNote: Note = {
-  };
-
+  public notes: Note[] = [];
+  public selectedNote: Note = {};
   public isAddNote: boolean = false;
   public isEditNote: boolean = false;
   public editNote: Note;
   public noteName: string;
   public hoverId: number;
+
+  constructor(
+    private noteService: NotesService) {
+  }
+
+  public ngOnInit(): void {
+    this.noteService.getNotes().subscribe(notes => {
+      console.log(notes);
+      if (notes) {
+        this.notes = notes;
+      }
+      else {
+        this.notes = [];
+      }
+    });
+  }
 
   public onAddNote(): void {
     this.isAddNote = true;
@@ -43,12 +51,15 @@ export class AppComponent {
     let note: Note = {
       id: count + 1,
       name: this.noteName,
-      content: ''
+      content: '',
+      date: new Date()
     }
-    this.notes.unshift(note);
 
-    this.isAddNote = false;
-    this.noteName = null;
+    this.notes.unshift(note);
+    this.noteService.updateNotes(this.notes).subscribe(notes => {
+      this.isAddNote = false;
+      this.noteName = null;
+    });
   }
 
   public cancelAddNote(): void {
@@ -65,11 +76,14 @@ export class AppComponent {
     this.notes.forEach(note => {
       if (note.id === this.editNote.id) {
         note.name = this.editNote.name;
+        note.date = new Date();
       }
     });
 
-    this.isEditNote = false;
-    this.editNote = null;
+    this.noteService.updateNotes(this.notes).subscribe(notes => {
+      this.isEditNote = false;
+      this.editNote = null;
+    });
   }
 
   public cancelEditNote(): void {
@@ -80,11 +94,19 @@ export class AppComponent {
   public onNoteSelect(note: Note): void {
     this.selectedNote = note;
   }
-public onTextUpdate(): void {
-    this.notes.forEach(note => {
-      if (note.id === this.selectedNote.id) {
-        note.content = this.selectedNote.content;
-      }
+
+  public onTextUpdate(): void {
+    //get all updated notes (if edited from browser)
+    this.noteService.getNotes().subscribe(notes => {
+      this.notes.forEach(note => {
+        if (note.id === this.selectedNote.id) {
+          note.content = this.selectedNote.content;
+          note.date = new Date();
+        }
+      });
+      
+      this.noteService.updateNotes(this.notes).subscribe(notes => {
+      });
     });
   }
 }
