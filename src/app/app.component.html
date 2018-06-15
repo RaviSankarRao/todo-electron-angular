@@ -1,20 +1,50 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-</div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://github.com/angular/angular-cli/wiki">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
+<nav>
+  <div class="nav-wrapper teal lighten-3">
+    <a href="javascript:void(0);" class="brand-logo">Logo</a>
+    <ul id="nav-mobile" class="right">
+      <li>
+        <a href="javascript:void(0);" (click)="onAddNote()">
+          <i class="material-icons">add</i>
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>
 
+<div class="row height-100">
+  <div class="col s3 height-100">
+    <div class="collection">
+      <a href="javascript:void(0);" 
+        class="collection-item" 
+        *ngFor="let note of notes" 
+        (click)="onNoteSelect(note)" 
+        [ngClass]="{'active': note.id === selectedNote.id }"
+        (mouseenter)="hoverId = note.id"
+        (mouseleave)="hoverId = 0"> {{note.name}} 
+        
+        <i class="material-icons right" 
+          *ngIf="hoverId === note.id" 
+           (click)="onNoteEdit(note)">edit</i></a>
+    </div>
+  </div>
+  <div class="col s9 height-100">
+    <textarea *ngIf="!isAddNote && !isEditNote"
+      [(ngModel)]="selectedNote.content" 
+      (keyup)="onTextUpdate()" 
+      class="materialize-textarea height-100"></textarea>
+
+      <div class="row" *ngIf="isAddNote" >
+        <input placeholder="Note name" type="text" [(ngModel)]="noteName">
+        <a (click)="saveAddNote()" class="waves-effect waves-light btn">Save</a>
+        <a (click)="cancelAddNote()" class="waves-effect waves-light btn">Cancel</a>
+      </div>
+
+      <div class="row" *ngIf="isEditNote" >
+        <input placeholder="Note name" type="text" [(ngModel)]="editNote.name">
+        <a (click)="saveEditNote()" class="waves-effect waves-light btn">Save</a>
+        <a (click)="cancelEditNote()" class="waves-effect waves-light btn">Cancel</a>
+      </div>
+    
+  </div>
+
+</div>
