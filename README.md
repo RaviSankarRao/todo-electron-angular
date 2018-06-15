@@ -1,4 +1,5 @@
 # About the app
+This is simple Notes taking desktop based app built on Angular5 and Electron. Data is persisted in JSON file which is accessed using Express-JS
 
 ## Getting Started
 Clone the branch to your local environment and just run `npm install`
