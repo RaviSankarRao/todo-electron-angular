@@ -28,4 +28,5 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 ## What are used in this app?
 [Materialize CSS](https://materializecss.com) - A modern responsive front-end framework based on Material Design.
+
 [jsonfile-npm](https://www.npmjs.com/package/jsonfile) - Node module to read and write from a json file.
