@@ -1,10 +1,30 @@
 <nav>
   <div class="nav-wrapper teal lighten-3">
-    <a href="javascript:void(0);" class="brand-logo">Logo</a>
+    <ul id="nav-mobile" class="left">
+      <li>
+        <a href="javascript:void(0);" (click)="sortAplhabetically()" title="Sort by Name">
+          <i class="material-icons">sort_by_alpha</i>
+        </a>
+      </li>
+      <li>
+        <a href="javascript:void(0);" (click)="sortByDate()" title="Sort by date (last updated)">
+          <i class="material-icons">av_timer</i>
+        </a>
+      </li>
+    </ul>
+    <a href="https://github.com/RaviSankarRao/todo-electron-angular" class="brand-logo">Quick Notes</a>
     <ul id="nav-mobile" class="right">
       <li>
-        <a href="javascript:void(0);" (click)="onAddNote()">
-          <i class="material-icons">add</i>
+        <div class="search-wrapper">
+          <input *ngIf="showSearch" type="text" [(ngModel)]="searchText" (keyup)="onSearchNote()" (blur)="showSearch = false" >
+          <a *ngIf="!showSearch"  href="javascript:void(0);" (click)="showSearch = true" title="Add a note">
+            <i class="material-icons">search</i>
+          </a>
+        </div>
+      </li>
+      <li>
+        <a href="javascript:void(0);" (click)="onAddNote()" title="Add a note">
+          <i class="material-icons">add_box</i>
         </a>
       </li>
     </ul>
@@ -12,11 +32,11 @@
 </nav>
 
 <div class="row height-100">
-  <div class="col s3 height-100">
+  <div class="col s4 height-100">
     <div class="collection">
       <a href="javascript:void(0);" 
         class="collection-item" 
-        *ngFor="let note of notes" 
+        *ngFor="let note of displayNotes" 
         (click)="onNoteSelect(note)" 
         [ngClass]="{'active': note.id === selectedNote.id }"
         (mouseenter)="hoverId = note.id"
@@ -24,10 +44,14 @@
         
         <i class="material-icons right" 
           *ngIf="hoverId === note.id" 
-           (click)="onNoteEdit(note)">edit</i></a>
+           (click)="onNoteEdit(note)">edit</i>
+           
+        <i class="material-icons right" 
+          *ngIf="hoverId === note.id" 
+           (click)="onNoteDelete(note)">delete_forever</i></a>
     </div>
   </div>
-  <div class="col s9 height-100">
+  <div class="col s5 height-100">
     <textarea *ngIf="!isAddNote && !isEditNote"
       [(ngModel)]="selectedNote.content" 
       (keyup)="onTextUpdate()" 
