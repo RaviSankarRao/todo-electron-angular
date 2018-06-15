@@ -33,4 +33,6 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 [Materialize CSS](https://materializecss.com) - A modern responsive front-end framework based on Material Design.
 
+[ExpressJS](https://expressjs.com/) - To host a quick server for GET and POST actions to JSON file.
+
 [jsonfile-npm](https://www.npmjs.com/package/jsonfile) - Node module to read and write from a json file.
