@@ -1,6 +1,7 @@
-# Getting Started
+# About the app
 
-`npm install`
+## Getting Started
+Clone the branch to your local environment and just run `npm install`
 
 ## Build
 `npm run electron-build`
